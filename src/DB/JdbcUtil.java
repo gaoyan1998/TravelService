@@ -17,7 +17,7 @@ public class JdbcUtil {
     static {
         try {
             //配置资源文件
-            config.load(JdbcUtil.class.getClassLoader().getResourceAsStream("db.properties"));
+            config.load(JdbcUtil.class.getClassLoader().getResourceAsStream("config.properties"));
 
             //加载驱动
             Class.forName(config.getProperty("driver"));
@@ -39,10 +39,26 @@ public class JdbcUtil {
         return connection;
     }
 
-    public static ResultSet getResult(String sql, String ... content ) throws SQLException {
-         connection = null;
-         statement = null;
-         resultSet = null;
+    public static int executelSql(String sql, String ... content){
+        // 调用工具类中的静态方法来获取连接
+        int flage;
+        connection = getConnection();
+        try {
+            statement = connection.createStatement();
+            preparedStatement = connection.prepareStatement(sql);
+            for (int i = 0; i<content.length;i++){
+                preparedStatement.setString(i+1,content[i]);
+            }
+             flage = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            flage = -1;
+        }finally {
+            releaseConn();
+        }
+        return flage;
+    }
+    public static ResultSet query(String sql, String ... content ) throws SQLException {
         // 调用工具类中的静态方法来获取连接
         connection = getConnection();
         statement = connection.createStatement();

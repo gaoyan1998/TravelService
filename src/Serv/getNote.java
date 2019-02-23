@@ -1,6 +1,6 @@
 package Serv;
 
-import Config.HttpConfig;
+import Util.HttpConfig;
 import DB.DbManager;
 import Model.Code;
 import Model.User;
@@ -27,7 +27,7 @@ public class getNote extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Code code;
         User user = AuthUtil.Auth(request);
-        code = new Code(HttpConfig.REQUEST_SUCCESS, "用户日记", GsonUtil.GsonString(DbManager.getNote(user)));
+        code = new Code(HttpConfig.REQUEST_SUCCESS, "Return note successful", GsonUtil.GsonString(DbManager.getNote(user)));
         response.getWriter().append(GsonUtil.GsonString(code));
     }
 }

@@ -1,6 +1,6 @@
 package Control;
 
-import Config.HttpConfig;
+import Util.HttpConfig;
 import Model.Code;
 import Model.User;
 import Util.AuthUtil;
@@ -23,10 +23,11 @@ public class UserAuth implements Filter {
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+        resp.setCharacterEncoding("utf8");
         HttpServletRequest reqest = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
         String currenPath = reqest.getServletPath();
-        if (currenPath.equals("/Login") || currenPath.equals("/register"))
+        if (currenPath.equals("/register"))
             chain.doFilter(req, resp);
         else if (Auth(reqest,response))
             chain.doFilter(req, resp);

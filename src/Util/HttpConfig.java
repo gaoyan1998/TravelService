@@ -1,4 +1,4 @@
-package Config;
+package Util;
 
 /**
  * Created by ikiler on 2019/2/22.

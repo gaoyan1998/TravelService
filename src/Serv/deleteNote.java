@@ -1,12 +1,9 @@
 package Serv;
 
-import Config.HttpConfig;
+import Util.HttpConfig;
 import DB.DbManager;
 import Model.Code;
-import Model.User;
-import Util.AuthUtil;
 import Util.GsonUtil;
-import Util.Http;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,14 +24,15 @@ public class deleteNote extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = AuthUtil.Auth(request);
         String id = request.getParameter("id");
         Code code;
-        Boolean flage = DbManager.deleteNote(id);
-        if (flage) {
+        int flage = DbManager.deleteNote(id);
+        if (flage>0) {
             code = new Code(HttpConfig.REQUEST_SUCCESS, "Delete successful", "");
-        } else {
-            code = new Code(HttpConfig.SERVER_ERR, "Delete Failed", "");
+        } else if (flage == 0){
+            code = new Code(HttpConfig.PARMATER_ERR, "Delete Failed not found this note", "");
+        }else {
+            code = new Code(HttpConfig.SERVER_ERR, "server err", "");
         }
         response.getWriter().append(GsonUtil.GsonString(code));
     }
