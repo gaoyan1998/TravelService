@@ -1,7 +1,6 @@
 package DB;
 
 import Model.*;
-import Serv.getFood;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -152,6 +151,32 @@ public class DbManager {
     public static int addFood(Food food){
         String sql = "INSERT INTO `travelapp`.`food` (`name`, `text`, `img`) VALUES (?,?,?)";
         int flage = JdbcUtil.executelSql(sql,food.getName(),food.getText(),food.getImagePath());
+        return flage;
+    }
+    public static int upDateFood(Food food){
+        String sql = "UPDATE `travelapp`.`food` SET `name` = ?, `text` = ?, `img` = ? WHERE (`_id` = ?)";
+        int flage = JdbcUtil.executelSql(sql,food.getName(),food.getText(),food.getImagePath(),food.getId()+"");
+        return flage;
+    }
+    public static int deleteFood(String id){
+        String sql = "DELETE FROM `travelapp`.`food` WHERE (`_id` = ?)";
+        int flage = JdbcUtil.executelSql(sql,id);
+        return flage;
+    }
+
+    public static int addSpot(Spot spot){
+        String sql = "INSERT INTO `travelapp`.`spot` (`name`, `text`, `img`) VALUES (?,?,?)";
+        int flage = JdbcUtil.executelSql(sql,spot.getName(),spot.getText(),spot.getImagePath());
+        return flage;
+    }
+    public static int upDateSpot(Spot spot){
+        String sql = "UPDATE `travelapp`.`food` SET `name` = ?, `text` = ?, `img` = ? WHERE (`_id` = ?)";
+        int flage = JdbcUtil.executelSql(sql,spot.getName(),spot.getText(),spot.getImagePath(),spot.getId()+"");
+        return flage;
+    }
+    public static int deleteSpot(String id){
+        String sql = "DELETE FROM `travelapp`.`spot` WHERE (`_id` = ?)";
+        int flage = JdbcUtil.executelSql(sql,id);
         return flage;
     }
     public static List<Food> getSpot(String url){
