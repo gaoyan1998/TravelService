@@ -10,7 +10,7 @@ public class JdbcUtil {
     public static Statement statement = null;
     public static PreparedStatement preparedStatement = null;
     private static ResultSet resultSet = null;
-
+    public static String localhost;
     //私有静态变量，用以读取配置文件
     private static Properties config = new Properties();
 
@@ -18,7 +18,7 @@ public class JdbcUtil {
         try {
             //配置资源文件
             config.load(JdbcUtil.class.getClassLoader().getResourceAsStream("config.properties"));
-
+            localhost = config.getProperty("localhost");
             //加载驱动
             Class.forName(config.getProperty("driver"));
         } catch (IOException e) {

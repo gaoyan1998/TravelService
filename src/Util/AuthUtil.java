@@ -4,6 +4,7 @@ import DB.DbManager;
 import Model.User;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,10 @@ public class AuthUtil {
             user = DbManager.getUser(request.getHeader("name"));
         }
         return user;
+    }
+    public static User AuthSession(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        return (User) session.getAttribute("user");
     }
 
     /**

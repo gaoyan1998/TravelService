@@ -1,8 +1,7 @@
 package DB;
 
-import Model.Note;
-import Model.Phone;
-import Model.User;
+import Model.*;
+import Serv.getFood;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -122,6 +121,63 @@ public class DbManager {
             e.printStackTrace();
         }
         System.out.println("DbManager:查询手机号");
+        return list;
+    }
+    public static List<Food> getFood(String url){
+
+        List<Food> list = null;
+        String sql = "SELECT * FROM travelapp.food";
+        try {
+            ResultSet resultSet = JdbcUtil.query(sql);
+            if (!resultSet.next()) {
+                list = null;
+            } else {
+                list = new ArrayList<>();
+                do {
+                    Food food = new Food();
+                    food.setId(resultSet.getInt("_id"));
+                    food.setImagePath(url+"/"+resultSet.getString("img"));
+                    food.setName(resultSet.getString("name"));
+                    food.setText(resultSet.getString("text"));
+                    list.add(food);
+                } while (resultSet.next());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            JdbcUtil.releaseConn();
+        }
+        return list;
+    }
+    public static int addFood(Food food){
+        String sql = "INSERT INTO `travelapp`.`food` (`name`, `text`, `img`) VALUES (?,?,?)";
+        int flage = JdbcUtil.executelSql(sql,food.getName(),food.getText(),food.getImagePath());
+        return flage;
+    }
+    public static List<Food> getSpot(String url){
+
+        List<Food> list = null;
+        String sql = "SELECT * FROM travelapp.spot";
+        try {
+            ResultSet resultSet = JdbcUtil.query(sql);
+            if (!resultSet.next()) {
+                list = null;
+            } else {
+                list = new ArrayList<>();
+                do {
+                    Spot spot = new Spot();
+                    spot.setId(resultSet.getInt("_id"));
+                    spot.setImagePath(url+"/"+resultSet.getString("img"));
+                    spot.setName(resultSet.getString("name"));
+                    spot.setText(resultSet.getString("text"));
+                    list.add(spot);
+                } while (resultSet.next());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            JdbcUtil.releaseConn();
+        }
         return list;
     }
 }

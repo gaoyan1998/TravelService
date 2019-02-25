@@ -10,6 +10,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -34,10 +35,12 @@ public class UserAuth implements Filter {
     }
 
     private boolean Auth(HttpServletRequest reqest, HttpServletResponse response) {
-        User user = AuthUtil.Auth(reqest);
+        User user;
         Code code;
-
-        if (user == null){
+        HttpSession session = reqest.getSession();
+        if ((user = (User) session.getAttribute("user")) != null){
+            return true;
+        }else if ((user = AuthUtil.Auth(reqest)) == null){
             code = new Code(HttpConfig.AUTH_ERR,"auth failed","");
             try {
                 response.getWriter().append(GsonUtil.GsonString(code));
@@ -46,6 +49,7 @@ public class UserAuth implements Filter {
             }
             return false;
         }
+        session.setAttribute("user",user);
         return true;
     }
 
