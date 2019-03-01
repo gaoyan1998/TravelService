@@ -8,6 +8,7 @@ import Util.AuthUtil;
 import Util.GsonUtil;
 import Util.Http;
 import Util.HttpConfig;
+import org.apache.commons.fileupload.FileUploadException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,17 +35,23 @@ public abstract class BaseServlet extends HttpServlet {
         this.response = response;
         user = AuthUtil.AuthSession(request);
         String action = request.getParameter("action");
-        switch (action) {
-            case "add":
-                add();
-                break;
-            case "delete":
-                del();
-                break;
-            case "select":
-                sel();
-                break;
-        }
+        if (action != null)
+            switch (action) {
+                case "add":
+                    add();
+                    break;
+                case "delete":
+                    del();
+                    break;
+                case "select":
+                    sel();
+                    break;
+                case "update":
+                    update();
+                    break;
+                default:
+                    doAction(request, response, action);
+            }
         doAction(request, response);
         write();
     }
@@ -52,7 +59,8 @@ public abstract class BaseServlet extends HttpServlet {
     public void write() throws IOException {
         getResponse().getWriter().append(GsonUtil.GsonString(getResult()));
     }
-    public void setResult(int flage,String json){
+
+    public void setResult(int flage, String json) {
         if (flage > 0) {
             code = new Code(HttpConfig.REQUEST_SUCCESS, " success", json);
         } else if (flage == 0) {
@@ -61,14 +69,24 @@ public abstract class BaseServlet extends HttpServlet {
             code = new Code(HttpConfig.SERVER_ERR, "err", "");
         }
     }
-    public void setResult(Code code){
+
+    public void setResult(Code code) {
         this.code = code;
     }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
-    public abstract void doAction(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    public void doAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    }
+
+    ;
+
+    public void doAction(HttpServletRequest request, HttpServletResponse response, String action) throws IOException {
+    }
+
+    ;
 
     public abstract void sel() throws IOException;
 
@@ -77,7 +95,6 @@ public abstract class BaseServlet extends HttpServlet {
     public abstract void add();
 
     public abstract void update();
-
 
 
     public HttpServletRequest getRequest() {

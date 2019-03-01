@@ -18,8 +18,8 @@ import java.util.List;
  * Created by ikiler on 2019/2/23.
  * Email : ikiler@126.com
  */
-@WebServlet(name = "phone", value = "/phone")
-public class phone extends BaseServlet {
+@WebServlet(name = "PhoneManager", value = "/PhoneManager")
+public class PhoneManager extends BaseServlet {
 
     @Override
     public void doAction(HttpServletRequest request, HttpServletResponse response) throws IOException {

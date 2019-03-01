@@ -1,5 +1,7 @@
 package Serv;
 
+import Model.User;
+import Util.AuthUtil;
 import Util.HttpConfig;
 import DB.DbManager;
 import Model.Code;
@@ -28,6 +30,8 @@ public class addNote extends HttpServlet {
         Code code;
         String json = Http.getStringFromReq(request);
         Note note = GsonUtil.GsonToBean(json, Note.class);
+        User user = AuthUtil.AuthSession(request);
+        note.setUserId(user.getId());
         int flage = DbManager.addNote(note);
         if (flage>0) {
             code = new Code(HttpConfig.REQUEST_SUCCESS, "Add Successful", "");

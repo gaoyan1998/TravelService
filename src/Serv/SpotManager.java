@@ -1,6 +1,7 @@
 package Serv;
 
 import Control.BaseServlet;
+import Control.FileUpload;
 import DB.DbManager;
 import DB.JdbcUtil;
 import Model.Code;
@@ -21,8 +22,8 @@ import java.io.IOException;
  * Created by ikiler on 2019/2/24.
  * Email : ikiler@126.com
  */
-@WebServlet(name = "getSpot", value = "/getSpot")
-public class getSpot extends BaseServlet {
+@WebServlet(name = "SpotManager", value = "/SpotManager")
+public class SpotManager extends BaseServlet {
 
     @Override
     public void doAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,15 +44,21 @@ public class getSpot extends BaseServlet {
 
     @Override
     public void add() {
-        String json = Http.getStringFromReq(getRequest());
-        Spot spot = GsonUtil.GsonToBean(json,Spot.class);
-        setResult(DbManager.addSpot(spot),"");
+        FileUpload upload = new FileUpload(getRequest());
+        String json = upload.getmJson();
+        String path = upload.getPath();
+        Spot spot = GsonUtil.GsonToBean(json, Spot.class);
+        spot.setImagePath(path);
+        setResult(DbManager.addSpot(spot), "");
     }
 
     @Override
     public void update() {
-        String json = Http.getStringFromReq(getRequest());
-        Spot spot = GsonUtil.GsonToBean(json,Spot.class);
-        setResult(DbManager.upDateFood(spot),"");
+        FileUpload upload = new FileUpload(getRequest());
+        String json = upload.getmJson();
+        String path = upload.getPath();
+        Spot spot = GsonUtil.GsonToBean(json, Spot.class);
+        spot.setImagePath(path);
+        setResult(DbManager.upDateSpot(spot), "");
     }
 }
